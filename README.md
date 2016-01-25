@@ -10,7 +10,7 @@ XML Sitemap Extra with Template Variables to override dynamic processing
 [[!GoogleSitemap0.9? &templates=`1,2,3`]]
 ```
 
-2. update the Template => TV Access for the override options
+2. update your Templates so they have TV Access to the GSM override options
 
 
 ## Roadmap 1.0
