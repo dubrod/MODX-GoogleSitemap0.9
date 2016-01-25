@@ -3,7 +3,7 @@
   "lowCaseName": "googlesitemap09",
   "description": "GoogleSitemap0.9 for MODX",
   "author": "Wayne Roddy",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "package": {
       "elements": {
           "tvs": [
@@ -36,6 +36,16 @@
               "type": "listbox",
               "inputOptionValues": "skip==||0.0||0.1||0.2||0.3||0.4||0.5||0.6||0.7||0.8||0.8||0.9||1.0",
               "sortOrder": 2,
+              "inputProperties": {
+                "allowBlank": 1
+              }
+            },
+            {
+              "caption": "Sitemap Image",
+              "name": "gsm09_image",
+              "description": "",
+              "type": "image",
+              "sortOrder": 3,
               "inputProperties": {
                 "allowBlank": 1
               }

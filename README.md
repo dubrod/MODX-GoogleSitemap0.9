@@ -20,7 +20,10 @@ XML Sitemap Extra with Template Variables to override dynamic processing
 3. Template Variable to Override "priority"
 4. Start Listing by Template
 
-## Roadmap 2.0
+## Roadmap 1.1
 
 1. Image Node in XML
+2. News Node in XML
+
+## Roadmap 2.0
 2. Video Node in XML

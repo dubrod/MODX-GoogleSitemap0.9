@@ -33,6 +33,9 @@ After Install:
 ',
     'changelog' => '# GoogleSitemap0.9 1.0.0
 - Basic Override Options
+
+# GoogleSitemap0.9 1.1.0
+- Added Image Node per resource
 ',
   ),
   'manifest-vehicles' => 
@@ -42,9 +45,9 @@ After Install:
       'vehicle_package' => 'transport',
       'vehicle_class' => 'xPDOObjectVehicle',
       'class' => 'modNamespace',
-      'guid' => 'a9737911218bae3f33c937fc0ee12d19',
+      'guid' => '11661e641f6f6b75e67d2a9f8db6d2d7',
       'native_key' => 'googlesitemap09',
-      'filename' => 'modNamespace/917293265a189d6d49e77826291481a4.vehicle',
+      'filename' => 'modNamespace/0e72c02ec1032602240e2da2c286cc24.vehicle',
       'namespace' => 'googlesitemap09',
     ),
     1 => 
@@ -52,9 +55,9 @@ After Install:
       'vehicle_package' => 'transport',
       'vehicle_class' => 'xPDOObjectVehicle',
       'class' => 'modCategory',
-      'guid' => '0b70dc3ecdd7c1847d3aeba56647741c',
+      'guid' => 'd3d191c6938c80793a9b2eb3a8830669',
       'native_key' => NULL,
-      'filename' => 'modCategory/8f8dc325f1d95c32aefd882fecd75121.vehicle',
+      'filename' => 'modCategory/c4602b705587263c3a71c4290227f56f.vehicle',
       'namespace' => 'googlesitemap09',
     ),
   ),
