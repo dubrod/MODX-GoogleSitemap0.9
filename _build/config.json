@@ -1,0 +1,83 @@
+{
+  "name": "GoogleSitemap0.9",
+  "lowCaseName": "googlesitemap09",
+  "description": "GoogleSitemap0.9 for MODX",
+  "author": "Wayne Roddy",
+  "version": "1.0.0",
+  "package": {
+      "elements": {
+          "tvs": [
+            {
+              "caption": "Include this page",
+              "name": "gsm09_include",
+              "description": "Overrides the fact this resource is Hidden or Unpublished",
+              "type": "checkbox",
+              "inputOptionValues": "Yes==yes",
+              "sortOrder": 0,
+              "inputProperties": {
+                "allowBlank": 1
+              }
+            },
+            {
+              "caption": "Override Change Frequency",
+              "name": "gsm09_changefreq",
+              "description": "",
+              "type": "listbox",
+              "inputOptionValues": "skip==||always||hourly||daily||weekly||monthly||yearly||never",
+              "sortOrder": 1,
+              "inputProperties": {
+                "allowBlank": 1
+              }
+            },
+            {
+              "caption": "Override Priority",
+              "name": "gsm09_priority",
+              "description": "",
+              "type": "listbox",
+              "inputOptionValues": "skip==||0.0||0.1||0.2||0.3||0.4||0.5||0.6||0.7||0.8||0.8||0.9||1.0",
+              "sortOrder": 2,
+              "inputProperties": {
+                "allowBlank": 1
+              }
+            }
+          ],
+          "snippets": [
+            {
+              "name": "GoogleSitemap0.9"
+            }
+          ],
+          "chunks": [
+              {
+                "name": "GoogleSitemap0.9_item",
+                "file": "googlesitemap09.chunk.tpl"
+              }
+          ],
+          "templates": [
+              {
+                  "name": "Google Sitemap 0.9",
+                  "file": "googlesitemap09.template.tpl",
+                  "icon": "icon-map"
+              }
+          ]
+      },
+      "resources": [
+        {
+            "pagetitle": "GoogleSitemap0.9",
+            "longtitle": "",
+            "alias": "sitemap",
+            "template": "Google Sitemap 0.9",
+            "isfolder": 0,
+            "published": 1,
+            "content_type": 2,
+            "hidemenu": 1,
+            "searchable":0,
+            "richtext":0
+        }
+      ]
+  },
+  "build": {
+    "readme": "docs/index.md",
+    "license": "docs/license.md",
+    "changelog": "docs/changelog.md"
+  }
+}

@@ -1,0 +1,171 @@
+<?php return array (
+  'unique_key' => 'category',
+  'preserve_keys' => false,
+  'update_object' => true,
+  'related_objects' => 
+  array (
+    'Chunks' => 
+    array (
+      'e6938504373fce27cae245d211fdcbe4' => 
+      array (
+        'preserve_keys' => false,
+        'update_object' => true,
+        'unique_key' => 'name',
+        'class' => 'modChunk',
+        'object' => '{"id":null,"source":0,"property_preprocess":0,"name":"GoogleSitemap0.9_item","description":"","editor_type":0,"category":0,"cache_type":0,"snippet":"<url>\\n    <loc>[[+url]]<\\/loc>\\n    <lastmod>[[+date]]<\\/lastmod>\\n    <changefreq>[[+update]]<\\/changefreq>\\n    <priority>[[+priority]]<\\/priority>\\n<\\/url>\\n","locked":0,"properties":"a:0:{}","static":0,"static_file":"","content":"<url>\\n    <loc>[[+url]]<\\/loc>\\n    <lastmod>[[+date]]<\\/lastmod>\\n    <changefreq>[[+update]]<\\/changefreq>\\n    <priority>[[+priority]]<\\/priority>\\n<\\/url>\\n"}',
+        'guid' => 'e42af535cd747ccb5371b5c060bee16c',
+        'native_key' => NULL,
+        'signature' => 'ec77228cd32617dc05fdbf3aa966d0fc',
+      ),
+    ),
+    'Snippets' => 
+    array (
+      '2f8ccbbe4b0b277c3dea1bf35ced80e4' => 
+      array (
+        'preserve_keys' => false,
+        'update_object' => true,
+        'unique_key' => 'name',
+        'class' => 'modSnippet',
+        'object' => '{"id":null,"source":0,"property_preprocess":0,"name":"GoogleSitemap0.9","description":"","editor_type":0,"category":0,"cache_type":0,"snippet":"\\/**\\n * GoogleSitemap0.9\\n *\\n *\\n * GoogleSitemap0.9 is free software; you can redistribute it and\\/or modify it\\n * under the terms of the MIT License\\n *\\n * Submit it to Google using the Search Console Sitemaps tool\\n * https:\\/\\/www.google.com\\/webmasters\\/tools\\/sitemap-list\\n *\\n * More information on Google Sitemap formats\\n * https:\\/\\/support.google.com\\/webmasters\\/answer\\/183668?hl=en&ref_topic=4581190\\n *\\n * Usage [[!GoogleSitemap0.9? &templates=`1,2,3,4`]]\\n *\\n *\\/\\n\\n$input = $modx->getOption(\'templates\', $scriptProperties);\\n$templates = explode(\\",\\", $input);\\n\\n$c = $modx->newQuery(\'modResource\');\\n$c->where(array(\\n    \'template:IN\' => $templates,\\n));\\n\\n\\/\\/ comma separated list including the primary key \\"id\\" of properties we need\\n$includeFields = $modx->getOption(\'includeFields\', $scriptProperties, \'id,pagetitle,longtitle,description,introtext,published,editedon,createdon,hidemenu\');\\n$c->select($includeFields); \\/\\/ only fetch the columns you need\\n\\n$resources = $modx->getCollection(\'modResource\', $c);\\n\\n$output = \\"\\";\\n$x = array();\\n\\nforeach ($resources as $res) {\\n    $canParse = true;\\n    $hidden = $res->get(\'hidemenu\');\\n    $published = $res->get(\'published\');\\n\\n    if($hidden == 1 || $published == 0){ $canParse = false; }\\n\\n    \\/\\/override TV\\n    $overrideParse = $res->getTVValue(\'gsm09_include\');\\n    if($overrideParse == \\"yes\\"){ $canParse = true; }\\n\\n    if ($canParse) {\\n        $id = $res->get(\'id\');\\n        $x[\'url\'] = $modx->makeUrl($id,\'\',\'\',\'full\');\\n\\n        \\/* Get the date *\\/\\n        $date = $res->get(\'editedon\') ? $res->get(\'editedon\') : $res->get(\'createdon\');\\n        $date = date(\\"Y-m-d\\", strtotime($date));\\n        $x[\'date\'] = $date;\\n\\n\\n        \\/* Get the date difference *\\/\\n        $datediff = datediff(\\"d\\", $date, date(\\"Y-m-d\\"));\\n        if ($datediff <=1) {\\n            $x[\'priority\'] = \'1.0\';\\n            $x[\'update\'] = \'daily\';\\n        } elseif (($datediff >1) && ($datediff<=7)) {\\n            $x[\'priority\'] = \'0.75\';\\n            $x[\'update\'] = \'weekly\';\\n        } elseif (($datediff >7) && ($datediff<=30)) {\\n            $x[\'priority\'] = \'0.50\';\\n            $x[\'update\'] = \'weekly\';\\n        } else {\\n            $x[\'priority\'] = \'0.25\';\\n            $x[\'update\'] = \'monthly\';\\n        }\\n\\n        \\/\\/override changefreq\\n        $overrideChangefreq = $res->getTVValue(\'gsm09_changefreq\');\\n        if($overrideChangefreq){ $x[\'update\'] = $overrideChangefreq; }\\n\\n        \\/\\/override priority\\n        $overridePriority = $res->getTVValue(\'gsm09_priority\');\\n        if($overridePriority){ $x[\'priority\'] = $overridePriority; }\\n\\n        \\/* add item to output *\\/\\n        $output .= $modx->parseChunk(\'GoogleSitemap0.9_item\', $x);\\n    }\\n}\\n\\nreturn $output;\\n\\n    \\/\\/Date \\/ Priority \\/ Update Equation\\n    function datediff($interval, $datefrom, $dateto, $using_timestamps = false) {\\n        if (!$using_timestamps) {\\n            $datefrom = strtotime($datefrom, 0);\\n            $dateto = strtotime($dateto, 0);\\n        }\\n        $difference = $dateto - $datefrom; \\/* Difference in seconds *\\/\\n        switch($interval) {\\n            case \'yyyy\': \\/* Number of full years *\\/\\n                $years_difference = floor($difference \\/ 31536000);\\n                if (mktime(date(\\"H\\", $datefrom), date(\\"i\\", $datefrom), date(\\"s\\", $datefrom), date(\\"n\\", $datefrom), date(\\"j\\", $datefrom), date(\\"Y\\", $datefrom)+$years_difference) > $dateto) {\\n                    $years_difference--;\\n                }\\n                if (mktime(date(\\"H\\", $dateto), date(\\"i\\", $dateto), date(\\"s\\", $dateto), date(\\"n\\", $dateto), date(\\"j\\", $dateto), date(\\"Y\\", $dateto)-($years_difference+1)) > $datefrom) {\\n                    $years_difference++;\\n                }\\n                $datediff = $years_difference;\\n                break;\\n\\n            case \'q\': \\/* Number of full quarters *\\/\\n                $quarters_difference = floor($difference \\/ 8035200);\\n                while (mktime(date(\\"H\\", $datefrom), date(\\"i\\", $datefrom), date(\\"s\\", $datefrom), date(\\"n\\", $datefrom)+($quarters_difference*3), date(\\"j\\", $dateto), date(\\"Y\\", $datefrom)) < $dateto) {\\n                    $quarters_difference++;\\n                }\\n                $quarters_difference--;\\n                $datediff = $quarters_difference;\\n                break;\\n\\n            case \'m\': \\/* Number of full months *\\/\\n                $months_difference = floor($difference \\/ 2678400);\\n                while (mktime(date(\\"H\\", $datefrom), date(\\"i\\", $datefrom), date(\\"s\\", $datefrom), date(\\"n\\", $datefrom)+($months_difference), date(\\"j\\", $dateto), date(\\"Y\\", $datefrom)) < $dateto) {\\n                    $months_difference++;\\n                }\\n                $months_difference--;\\n                $datediff = $months_difference;\\n                break;\\n\\n            case \'y\': \\/* Difference between day numbers *\\/\\n                $datediff = date(\'z\',$dateto) - date(\'z\',$datefrom);\\n                break;\\n\\n            case \'d\': \\/* Number of full days *\\/\\n                $datediff = floor($difference \\/ 86400);\\n                break;\\n\\n            case \'w\': \\/* Number of full weekdays *\\/\\n                $days_difference = floor($difference \\/ 86400);\\n                $weeks_difference = floor($days_difference \\/ 7); \\/* Complete weeks *\\/\\n                $first_day = date(\'w\', $datefrom);\\n                $days_remainder = floor($days_difference % 7);\\n                \\/* Do we have a Saturday or Sunday in the remainder? *\\/\\n                $odd_days = $first_day + $days_remainder;\\n                if ($odd_days > 7) { \\/* Sunday *\\/\\n                    $days_remainder--;\\n                }\\n                if ($odd_days > 6) { \\/* Saturday *\\/\\n                    $days_remainder--;\\n                }\\n                $datediff = ($weeks_difference * 5) + $days_remainder;\\n                break;\\n\\n            case \'ww\': \\/* Number of full weeks *\\/\\n                $datediff = floor($difference \\/ 604800);\\n                break;\\n\\n            case \'h\': \\/* Number of full hours *\\/\\n                $datediff = floor($difference \\/ 3600);\\n                break;\\n\\n            case \'n\': \\/* Number of full minutes *\\/\\n                $datediff = floor($difference \\/ 60);\\n                break;\\n\\n            default: \\/* Number of full seconds (default) *\\/\\n                $datediff = $difference;\\n                break;\\n        }\\n        return $datediff;\\n    }","locked":0,"properties":"a:0:{}","moduleguid":"","static":0,"static_file":"","content":"\\/**\\n * GoogleSitemap0.9\\n *\\n *\\n * GoogleSitemap0.9 is free software; you can redistribute it and\\/or modify it\\n * under the terms of the MIT License\\n *\\n * Submit it to Google using the Search Console Sitemaps tool\\n * https:\\/\\/www.google.com\\/webmasters\\/tools\\/sitemap-list\\n *\\n * More information on Google Sitemap formats\\n * https:\\/\\/support.google.com\\/webmasters\\/answer\\/183668?hl=en&ref_topic=4581190\\n *\\n * Usage [[!GoogleSitemap0.9? &templates=`1,2,3,4`]]\\n *\\n *\\/\\n\\n$input = $modx->getOption(\'templates\', $scriptProperties);\\n$templates = explode(\\",\\", $input);\\n\\n$c = $modx->newQuery(\'modResource\');\\n$c->where(array(\\n    \'template:IN\' => $templates,\\n));\\n\\n\\/\\/ comma separated list including the primary key \\"id\\" of properties we need\\n$includeFields = $modx->getOption(\'includeFields\', $scriptProperties, \'id,pagetitle,longtitle,description,introtext,published,editedon,createdon,hidemenu\');\\n$c->select($includeFields); \\/\\/ only fetch the columns you need\\n\\n$resources = $modx->getCollection(\'modResource\', $c);\\n\\n$output = \\"\\";\\n$x = array();\\n\\nforeach ($resources as $res) {\\n    $canParse = true;\\n    $hidden = $res->get(\'hidemenu\');\\n    $published = $res->get(\'published\');\\n\\n    if($hidden == 1 || $published == 0){ $canParse = false; }\\n\\n    \\/\\/override TV\\n    $overrideParse = $res->getTVValue(\'gsm09_include\');\\n    if($overrideParse == \\"yes\\"){ $canParse = true; }\\n\\n    if ($canParse) {\\n        $id = $res->get(\'id\');\\n        $x[\'url\'] = $modx->makeUrl($id,\'\',\'\',\'full\');\\n\\n        \\/* Get the date *\\/\\n        $date = $res->get(\'editedon\') ? $res->get(\'editedon\') : $res->get(\'createdon\');\\n        $date = date(\\"Y-m-d\\", strtotime($date));\\n        $x[\'date\'] = $date;\\n\\n\\n        \\/* Get the date difference *\\/\\n        $datediff = datediff(\\"d\\", $date, date(\\"Y-m-d\\"));\\n        if ($datediff <=1) {\\n            $x[\'priority\'] = \'1.0\';\\n            $x[\'update\'] = \'daily\';\\n        } elseif (($datediff >1) && ($datediff<=7)) {\\n            $x[\'priority\'] = \'0.75\';\\n            $x[\'update\'] = \'weekly\';\\n        } elseif (($datediff >7) && ($datediff<=30)) {\\n            $x[\'priority\'] = \'0.50\';\\n            $x[\'update\'] = \'weekly\';\\n        } else {\\n            $x[\'priority\'] = \'0.25\';\\n            $x[\'update\'] = \'monthly\';\\n        }\\n\\n        \\/\\/override changefreq\\n        $overrideChangefreq = $res->getTVValue(\'gsm09_changefreq\');\\n        if($overrideChangefreq){ $x[\'update\'] = $overrideChangefreq; }\\n\\n        \\/\\/override priority\\n        $overridePriority = $res->getTVValue(\'gsm09_priority\');\\n        if($overridePriority){ $x[\'priority\'] = $overridePriority; }\\n\\n        \\/* add item to output *\\/\\n        $output .= $modx->parseChunk(\'GoogleSitemap0.9_item\', $x);\\n    }\\n}\\n\\nreturn $output;\\n\\n    \\/\\/Date \\/ Priority \\/ Update Equation\\n    function datediff($interval, $datefrom, $dateto, $using_timestamps = false) {\\n        if (!$using_timestamps) {\\n            $datefrom = strtotime($datefrom, 0);\\n            $dateto = strtotime($dateto, 0);\\n        }\\n        $difference = $dateto - $datefrom; \\/* Difference in seconds *\\/\\n        switch($interval) {\\n            case \'yyyy\': \\/* Number of full years *\\/\\n                $years_difference = floor($difference \\/ 31536000);\\n                if (mktime(date(\\"H\\", $datefrom), date(\\"i\\", $datefrom), date(\\"s\\", $datefrom), date(\\"n\\", $datefrom), date(\\"j\\", $datefrom), date(\\"Y\\", $datefrom)+$years_difference) > $dateto) {\\n                    $years_difference--;\\n                }\\n                if (mktime(date(\\"H\\", $dateto), date(\\"i\\", $dateto), date(\\"s\\", $dateto), date(\\"n\\", $dateto), date(\\"j\\", $dateto), date(\\"Y\\", $dateto)-($years_difference+1)) > $datefrom) {\\n                    $years_difference++;\\n                }\\n                $datediff = $years_difference;\\n                break;\\n\\n            case \'q\': \\/* Number of full quarters *\\/\\n                $quarters_difference = floor($difference \\/ 8035200);\\n                while (mktime(date(\\"H\\", $datefrom), date(\\"i\\", $datefrom), date(\\"s\\", $datefrom), date(\\"n\\", $datefrom)+($quarters_difference*3), date(\\"j\\", $dateto), date(\\"Y\\", $datefrom)) < $dateto) {\\n                    $quarters_difference++;\\n                }\\n                $quarters_difference--;\\n                $datediff = $quarters_difference;\\n                break;\\n\\n            case \'m\': \\/* Number of full months *\\/\\n                $months_difference = floor($difference \\/ 2678400);\\n                while (mktime(date(\\"H\\", $datefrom), date(\\"i\\", $datefrom), date(\\"s\\", $datefrom), date(\\"n\\", $datefrom)+($months_difference), date(\\"j\\", $dateto), date(\\"Y\\", $datefrom)) < $dateto) {\\n                    $months_difference++;\\n                }\\n                $months_difference--;\\n                $datediff = $months_difference;\\n                break;\\n\\n            case \'y\': \\/* Difference between day numbers *\\/\\n                $datediff = date(\'z\',$dateto) - date(\'z\',$datefrom);\\n                break;\\n\\n            case \'d\': \\/* Number of full days *\\/\\n                $datediff = floor($difference \\/ 86400);\\n                break;\\n\\n            case \'w\': \\/* Number of full weekdays *\\/\\n                $days_difference = floor($difference \\/ 86400);\\n                $weeks_difference = floor($days_difference \\/ 7); \\/* Complete weeks *\\/\\n                $first_day = date(\'w\', $datefrom);\\n                $days_remainder = floor($days_difference % 7);\\n                \\/* Do we have a Saturday or Sunday in the remainder? *\\/\\n                $odd_days = $first_day + $days_remainder;\\n                if ($odd_days > 7) { \\/* Sunday *\\/\\n                    $days_remainder--;\\n                }\\n                if ($odd_days > 6) { \\/* Saturday *\\/\\n                    $days_remainder--;\\n                }\\n                $datediff = ($weeks_difference * 5) + $days_remainder;\\n                break;\\n\\n            case \'ww\': \\/* Number of full weeks *\\/\\n                $datediff = floor($difference \\/ 604800);\\n                break;\\n\\n            case \'h\': \\/* Number of full hours *\\/\\n                $datediff = floor($difference \\/ 3600);\\n                break;\\n\\n            case \'n\': \\/* Number of full minutes *\\/\\n                $datediff = floor($difference \\/ 60);\\n                break;\\n\\n            default: \\/* Number of full seconds (default) *\\/\\n                $datediff = $difference;\\n                break;\\n        }\\n        return $datediff;\\n    }"}',
+        'guid' => '63ae7ef1af6828bc16b580c4f18b65e7',
+        'native_key' => NULL,
+        'signature' => '5dbe44d90ba8d05f38a90503f4142959',
+      ),
+    ),
+    'Templates' => 
+    array (
+      '56bded8ba8dfa4a1bcfc685bfb56a69e' => 
+      array (
+        'preserve_keys' => false,
+        'update_object' => true,
+        'unique_key' => 'templatename',
+        'class' => 'modTemplate',
+        'object' => '{"id":null,"source":0,"property_preprocess":0,"templatename":"Google Sitemap 0.9","description":"","editor_type":0,"category":0,"icon":"icon-map","template_type":0,"content":"<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>\\n<urlset xmlns=\\"http:\\/\\/www.sitemaps.org\\/schemas\\/sitemap\\/0.9\\" xmlns:image=\\"http:\\/\\/www.google.com\\/schemas\\/sitemap-image\\/1.1\\" xmlns:video=\\"http:\\/\\/www.google.com\\/schemas\\/sitemap-video\\/1.1\\">\\n[[!GoogleSitemap0.9? &templates=`1`]]\\n<\\/urlset>\\n","locked":0,"properties":"a:0:{}","static":0,"static_file":""}',
+        'guid' => 'e15a0f41abf3d35cfd227c52eb036ecc',
+        'native_key' => NULL,
+        'signature' => '517b5eb8f1860905ad94bee7ab4e59d0',
+      ),
+    ),
+    'TemplateVars' => 
+    array (
+      '051feccc6cce9e0a56e6a94bb33bacf9' => 
+      array (
+        'preserve_keys' => false,
+        'update_object' => true,
+        'unique_key' => 'name',
+        'class' => 'modTemplateVar',
+        'object' => '{"id":null,"source":0,"property_preprocess":0,"type":"checkbox","name":"gsm09_include","caption":"Include this page","description":"Overrides the fact this resource is Hidden or Unpublished","editor_type":0,"category":0,"locked":0,"elements":"Yes==yes","rank":0,"display":"","default_text":"","properties":"a:0:{}","input_properties":"a:1:{s:10:\\"allowBlank\\";i:1;}","output_properties":null,"static":0,"static_file":"","content":""}',
+        'guid' => 'c1ff70e92532dd1c898ebaeb46fd00f6',
+        'native_key' => NULL,
+        'signature' => '9bc92ae9e610b921673713e66dbea279',
+      ),
+      'db2e01884e0007f72522da7f14bf6696' => 
+      array (
+        'preserve_keys' => false,
+        'update_object' => true,
+        'unique_key' => 'name',
+        'class' => 'modTemplateVar',
+        'object' => '{"id":null,"source":0,"property_preprocess":0,"type":"listbox","name":"gsm09_changefreq","caption":"Override Change Frequency","description":"","editor_type":0,"category":0,"locked":0,"elements":"skip==||always||hourly||daily||weekly||monthly||yearly||never","rank":1,"display":"","default_text":"","properties":"a:0:{}","input_properties":"a:1:{s:10:\\"allowBlank\\";i:1;}","output_properties":null,"static":0,"static_file":"","content":""}',
+        'guid' => 'f29a2da165d85cb422150406f6af6f0e',
+        'native_key' => NULL,
+        'signature' => '6b752515d0cb2564e1fc8c17f8710d9a',
+      ),
+      '8f5d109fb979f7965166f841c12aa98c' => 
+      array (
+        'preserve_keys' => false,
+        'update_object' => true,
+        'unique_key' => 'name',
+        'class' => 'modTemplateVar',
+        'object' => '{"id":null,"source":0,"property_preprocess":0,"type":"listbox","name":"gsm09_priority","caption":"Override Priority","description":"","editor_type":0,"category":0,"locked":0,"elements":"skip==||0.0||0.1||0.2||0.3||0.4||0.5||0.6||0.7||0.8||0.8||0.9||1.0","rank":2,"display":"","default_text":"","properties":"a:0:{}","input_properties":"a:1:{s:10:\\"allowBlank\\";i:1;}","output_properties":null,"static":0,"static_file":"","content":""}',
+        'guid' => 'f4923701a3d6b84ebb845c15866863e1',
+        'native_key' => NULL,
+        'signature' => '7d57224dc166ca88e756dc293e846fdb',
+      ),
+    ),
+  ),
+  'related_object_attributes' => 
+  array (
+    'Children' => 
+    array (
+      'preserve_keys' => false,
+      'update_object' => true,
+      'unique_key' => 
+      array (
+        0 => 'parent',
+        1 => 'category',
+      ),
+    ),
+    'Snippets' => 
+    array (
+      'preserve_keys' => false,
+      'update_object' => true,
+      'unique_key' => 'name',
+    ),
+    'Chunks' => 
+    array (
+      'preserve_keys' => false,
+      'update_object' => true,
+      'unique_key' => 'name',
+    ),
+    'Templates' => 
+    array (
+      'preserve_keys' => false,
+      'update_object' => true,
+      'unique_key' => 'templatename',
+    ),
+    'TemplateVars' => 
+    array (
+      'preserve_keys' => false,
+      'update_object' => true,
+      'unique_key' => 'name',
+    ),
+    'Plugins' => 
+    array (
+      'unique_key' => 'name',
+      'preserve_keys' => false,
+      'update_object' => true,
+      'related_objects' => true,
+      'related_object_attributes' => 
+      array (
+        'PluginEvents' => 
+        array (
+          'preserve_keys' => true,
+          'update_object' => false,
+          'unique_key' => 
+          array (
+            0 => 'pluginid',
+            1 => 'event',
+          ),
+        ),
+      ),
+    ),
+  ),
+  'namespace' => 'googlesitemap09',
+  'resolve' => 
+  array (
+    0 => 
+    array (
+      'type' => 'file',
+      'body' => '{"source":"googlesitemap09-1.0.0-pl\\/modCategory\\/1989e28574f5afe77a2e4ea9672b8f12\\/0\\/","target":"return MODX_CORE_PATH . \'components\\/\';","name":"googlesitemap09"}',
+    ),
+    1 => 
+    array (
+      'type' => 'php',
+      'body' => '{"source":"googlesitemap09-1.0.0-pl\\/modCategory\\/1989e28574f5afe77a2e4ea9672b8f12.gpm.resolve.tv_templates.resolver","type":"php","name":"gpm.resolve.tv_templates"}',
+    ),
+    2 => 
+    array (
+      'type' => 'php',
+      'body' => '{"source":"googlesitemap09-1.0.0-pl\\/modCategory\\/1989e28574f5afe77a2e4ea9672b8f12.gpm.resolve.resources.resolver","type":"php","name":"gpm.resolve.resources"}',
+    ),
+  ),
+  'validate' => NULL,
+  'vehicle_package' => 'transport',
+  'vehicle_class' => 'xPDOObjectVehicle',
+  'guid' => '5a3bf196e946814f429edbe3e2372015',
+  'package' => 'modx',
+  'class' => 'modCategory',
+  'signature' => '1989e28574f5afe77a2e4ea9672b8f12',
+  'native_key' => NULL,
+  'object' => '{"id":null,"parent":0,"category":"GoogleSitemap0.9","rank":0}',
+);
