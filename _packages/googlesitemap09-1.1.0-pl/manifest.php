@@ -30,12 +30,16 @@ XML Sitemap Extra with Template Variables to override dynamic processing
 After Install:
 1. update the "templates" you want to list in the installed template. The default is "1".
 2. update the Template => TV Access for the override options
+
+**Friendly URLs must be turned ON**
 ',
     'changelog' => '# GoogleSitemap0.9 1.0.0
 - Basic Override Options
 
 # GoogleSitemap0.9 1.1.0
 - Added Image Node per resource
+- friendly urls must be turned ON
+- added check for deleted == 1 
 ',
   ),
   'manifest-vehicles' => 
@@ -45,9 +49,9 @@ After Install:
       'vehicle_package' => 'transport',
       'vehicle_class' => 'xPDOObjectVehicle',
       'class' => 'modNamespace',
-      'guid' => '11661e641f6f6b75e67d2a9f8db6d2d7',
+      'guid' => '1affa47e1bf2813138ea3bb6cd394aff',
       'native_key' => 'googlesitemap09',
-      'filename' => 'modNamespace/0e72c02ec1032602240e2da2c286cc24.vehicle',
+      'filename' => 'modNamespace/8a874aa3bfdb8a8831cc1fcaa842c2f2.vehicle',
       'namespace' => 'googlesitemap09',
     ),
     1 => 
@@ -55,9 +59,9 @@ After Install:
       'vehicle_package' => 'transport',
       'vehicle_class' => 'xPDOObjectVehicle',
       'class' => 'modCategory',
-      'guid' => 'd3d191c6938c80793a9b2eb3a8830669',
+      'guid' => '65abc6d82b7d62628f61568958565ca5',
       'native_key' => NULL,
-      'filename' => 'modCategory/c4602b705587263c3a71c4290227f56f.vehicle',
+      'filename' => 'modCategory/1aeeb8712da7c3113079b2c70e90b05f.vehicle',
       'namespace' => 'googlesitemap09',
     ),
   ),

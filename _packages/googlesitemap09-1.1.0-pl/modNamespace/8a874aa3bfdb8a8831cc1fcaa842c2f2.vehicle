@@ -9,10 +9,10 @@
   'validate' => NULL,
   'vehicle_package' => 'transport',
   'vehicle_class' => 'xPDOObjectVehicle',
-  'guid' => '11661e641f6f6b75e67d2a9f8db6d2d7',
+  'guid' => '1affa47e1bf2813138ea3bb6cd394aff',
   'package' => 'modx',
   'class' => 'modNamespace',
-  'signature' => '0e72c02ec1032602240e2da2c286cc24',
+  'signature' => '8a874aa3bfdb8a8831cc1fcaa842c2f2',
   'native_key' => 'googlesitemap09',
   'object' => '{"name":"googlesitemap09","path":"{core_path}components\\/googlesitemap09\\/","assets_path":"{assets_path}components\\/googlesitemap09\\/"}',
 );

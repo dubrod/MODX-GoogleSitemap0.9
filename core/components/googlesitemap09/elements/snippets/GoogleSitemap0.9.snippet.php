@@ -25,7 +25,7 @@ $c->where(array(
 ));
 
 // comma separated list including the primary key "id" of properties we need
-$includeFields = $modx->getOption('includeFields', $scriptProperties, 'id,pagetitle,longtitle,description,introtext,published,editedon,createdon,hidemenu');
+$includeFields = $modx->getOption('includeFields', $scriptProperties, 'id,pagetitle,longtitle,description,introtext,published,editedon,createdon,hidemenu,deleted');
 $c->select($includeFields); // only fetch the columns you need
 
 $resources = $modx->getCollection('modResource', $c);
@@ -37,8 +37,9 @@ foreach ($resources as $res) {
     $canParse = true;
     $hidden = $res->get('hidemenu');
     $published = $res->get('published');
+    $deleted = $res->get('deleted');
 
-    if($hidden == 1 || $published == 0){ $canParse = false; }
+    if($hidden == 1 || $published == 0 || $deleted == 1){ $canParse = false; }
 
     //override TV
     $overrideParse = $res->getTVValue('gsm09_include');
